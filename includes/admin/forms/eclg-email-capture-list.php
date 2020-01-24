@@ -15,7 +15,7 @@ if( ! class_exists( 'WP_List_Table' ) ) {
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
 	
-class Wpens_Subscribers_List extends WP_List_Table {
+class Eclg_Subscribers_List extends WP_List_Table {
 
     public $per_page;
 	
@@ -46,7 +46,7 @@ class Wpens_Subscribers_List extends WP_List_Table {
         global $wpdb;
 		
 		//if search is call then pass searching value to function for displaying searching values
-		$search_title = isset($_REQUEST['s']) ? $_REQUEST['s'] : '';
+		$search_title = isset($_REQUEST['s']) ? sanitize_text_field($_REQUEST['s']) : '';
 		
         // Table name to get data
         $table_name = $wpdb->prefix . 'eclg_subscribers';
@@ -67,7 +67,7 @@ class Wpens_Subscribers_List extends WP_List_Table {
 
 		$offset = 0;
 		if( isset($_GET['paged']) ){
-			$offset = $_GET['paged'] * $limit - $limit;
+			$offset = absint($_GET['paged']) * $limit - $limit;
 		}
 
 		$query .= " ORDER BY date desc LIMIT $limit OFFSET $offset" ;
@@ -333,7 +333,7 @@ class Wpens_Subscribers_List extends WP_List_Table {
 }
 
 //Create an instance of our package class...
-$NewsletterListTable = new Wpens_Subscribers_List();
+$NewsletterListTable = new Eclg_Subscribers_List();
 
 //Fetch, prepare, sort, and filter our data...
 $NewsletterListTable->prepare_items(); 

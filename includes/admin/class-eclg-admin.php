@@ -107,7 +107,7 @@ class Eclg_Admin {
 				if( isset($_GET['eclg_id']) ) { 
 					$query .= " WHERE ";
 					foreach($_GET['eclg_id'] as $id){
-						$query  .= " id = $id || ";
+						$query  .= " id = ".absint($id)." || ";
 					}
 					$query = rtrim($query, '|| ');
 				}
