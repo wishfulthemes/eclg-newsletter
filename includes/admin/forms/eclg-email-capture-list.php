@@ -127,7 +127,7 @@ class Eclg_Subscribers_List extends WP_List_Table {
 
 	    //Build row actions
 		$actions = array(
-			'delete'    => sprintf('<a href="?page=%s&action=%s&eclg_ids[]=%s">'.__('Delete', 'eclg').'</a>',$_REQUEST['page'],'delete',$item['id'])
+			'delete'    => sprintf('<a href="?page=%s&action=%s&eclg_ids[]=%s">'.__('Delete', 'eclg').'</a>',esc_attr($_REQUEST['page']),'delete',esc_attr($item['id']))
 			);
 
 	    //Return the title contents	        
@@ -360,7 +360,7 @@ $NewsletterListTable->prepare_items();
 		<h1 class="wp-heading-inline"><?php _e( 'Signup Users', 'eclg' ); ?></h1>
 		<input type="submit" name="export" class="page-title-action" value="Export CSV" />
 		
-		<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
+		<input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']); ?>" />
 		<!-- Search User -->
 		<?php $NewsletterListTable->search_box( __( 'Search User', 'eclg' ), 'eclg_ltable_search' ); ?>
 		<!-- Now we can render the completed list table -->
