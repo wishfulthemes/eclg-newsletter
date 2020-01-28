@@ -73,8 +73,11 @@ class Eclg_Admin {
 			
 			$eclg_id = array();
 			if( isset($_GET['eclg_id']) ) { 
-				$eclg_id = $_GET['eclg_id'];
+				$eclg_id = array_map(function($record_id){
+					return absint($record_id);
+				}, $_GET['eclg_id']);
 			}
+			
 				
 			if( count( $eclg_id ) > 0 ) { //check if any checkbox is selected
 
@@ -82,7 +85,7 @@ class Eclg_Admin {
 
 				// Delete bulk subsribers
 				foreach ($eclg_id as $key => $value) {
-					$wpdb->delete( $table_name , array( 'ID' => $value ) );
+					$wpdb->delete( $table_name , array( 'ID' => absint($value )) );
 				}
 				
 				$redirect_url = add_query_arg( array( 'message' => '3' ), $redirect_url );
