@@ -41,10 +41,10 @@ class Eclg_Scripts {
 		// localization script
 		wp_localize_script( 'eclg-public-js', 'EcLg', array(
 															'ajaxurl' => admin_url('admin-ajax.php'),
-															'fname_empty' => __( 'Please enter your firstname.', 'eclg' ),
-															'lname_empty' => __( 'Please enter your lastname.', 'eclg' ),
-															'email_empty' => __( 'Please enter email address.', 'eclg' ),
-															'email_valid' => __( 'Please enter valid email address.', 'eclg' )
+															'fname_empty' => __( 'Please enter your firstname.', 'eclg-newsletter' ),
+															'lname_empty' => __( 'Please enter your lastname.', 'eclg-newsletter' ),
+															'email_empty' => __( 'Please enter email address.', 'eclg-newsletter' ),
+															'email_valid' => __( 'Please enter valid email address.', 'eclg-newsletter' )
 														) );
 		
 		

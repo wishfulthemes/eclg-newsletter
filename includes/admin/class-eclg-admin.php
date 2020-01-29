@@ -32,7 +32,7 @@ class Eclg_Admin {
 	 */
 	public function eclg_ltable_add_menu_page() {
 		 
-		$eclg_setting = add_menu_page( __( 'Email Capture & Lead Generation', 'eclg' ), __( 'Email Capture & Lead Generation', 'eclg' ), 'manage_options','eclg-list', array($this, 'eclg_ltable_newsletter_list') , 'dashicons-email-alt2' );
+		$eclg_setting = add_menu_page( __( 'Email Capture & Lead Generation', 'eclg-newsletter' ), __( 'Email Capture & Lead Generation', 'eclg-newsletter' ), 'manage_options','eclg-list', array($this, 'eclg_ltable_newsletter_list') , 'dashicons-email-alt2' );
 		
 		// add_action( "admin_head-$eclg_setting", array() );
 	}

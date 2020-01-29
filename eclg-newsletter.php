@@ -5,7 +5,7 @@
  * Version: 1.0.0
  * Author: wishfulthemes
  * Author URI: https://www.wishfulthemes.com
- * Text Domain: eclg
+ * Text Domain: eclg-newsletter
  * Domain Path: languages
  *
  * License: GPLv2 or later
@@ -55,10 +55,10 @@ global $eclg_scripts,$eclg_admin,$eclg_newsletter;
  * @since 1.0.0
  */
 function eclg_load_plugin_textdomain() {
-	$locale = apply_filters( 'plugin_locale', get_locale(), 'eclg' );
+	$locale = apply_filters( 'plugin_locale', get_locale(), 'eclg-newsletter' );
 
-	load_textdomain( 'eclg', WP_LANG_DIR . '/eclg-newsletter/eclg-' . $locale . '.mo' );
-	load_plugin_textdomain( 'eclg', false, ECLG_PLUGIN_DIR . '/languages' );
+	load_textdomain( 'eclg-newsletter', WP_LANG_DIR . '/eclg-newsletter/eclg-newsletter' . $locale . '.mo' );
+	load_plugin_textdomain( 'eclg-newsletter', false, ECLG_PLUGIN_DIR . '/languages' );
 }
 add_action( 'load_plugins', 'eclg_load_plugin_textdomain' );
 

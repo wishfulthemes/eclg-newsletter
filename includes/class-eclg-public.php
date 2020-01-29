@@ -44,19 +44,19 @@ class Eclg_Public {
 		// Check firstname validation
 		if( isset($_POST['firstname']) && empty($firstname) ) {
 			$response['status'] = '0';
-			$response['errmsg'] = __( 'Please enter firstname', 'eclg' );
+			$response['errmsg'] = __( 'Please enter firstname', 'eclg-newsletter' );
 		} 
 
 		// Check email validation
 		if( empty($email) ) {
 			$response['status'] = '0';
-			$response['errmsg'] = __( 'Please enter email address', 'eclg' );
+			$response['errmsg'] = __( 'Please enter email address', 'eclg-newsletter' );
 		} else if( !filter_var($email, FILTER_VALIDATE_EMAIL) ) {
 			$response['status'] = '0';
-			$response['errmsg'] = __( 'Please enter valid email address.', 'eclg' );
+			$response['errmsg'] = __( 'Please enter valid email address.', 'eclg-newsletter' );
 		} else if( count($myrows) > 0 ) {
 			$response['status'] = '0';
-			$response['errmsg'] = __( 'You have already subscribed.', 'eclg' );
+			$response['errmsg'] = __( 'You have already subscribed.', 'eclg-newsletter' );
 		}
 
 		// if error print and exit
@@ -86,7 +86,7 @@ class Eclg_Public {
 		if( !empty($wpdb) && !is_wp_error($wpdb) ) {
 
 			$response['status'] = '1';
-			$response['errmsg'] = __( 'You have subscribed successfully!.', 'eclg' );
+			$response['errmsg'] = __( 'You have subscribed successfully!.', 'eclg-newsletter' );
 			
 		}
 
