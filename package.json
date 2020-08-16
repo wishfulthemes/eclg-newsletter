@@ -1,0 +1,17 @@
+{
+  "name": "eclg-newsletter",
+  "version": "1.0.0",
+  "description": "Email signup and newsletter plugin",
+  "main": "index.js",
+  "repository": "git@github.com:wishfulthemes/eclg-newsletter.git",
+  "author": "Wishful Themes",
+  "license": "MIT",
+  "scripts": {
+    "start": "wp-scripts start",
+    "build": "wp-scripts build"
+  },
+  "devDependencies": {
+    "@wordpress/babel-preset-default": "^4.17.0",
+    "@wordpress/scripts": "^12.1.1"
+  }
+}

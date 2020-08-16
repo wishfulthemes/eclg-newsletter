@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Email Capture & Lead Generation
  * Description: Email Capture & Lead Generation plugin helps to collect emails with first name and last name and get list of subscriber in your WordPress dashboard and download list in CSV formate.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: wishfulthemes
  * Author URI: https://www.wishfulthemes.com
  * Text Domain: eclg-newsletter
@@ -22,27 +22,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Basic plugin definitions 
- * 
+ * Basic plugin definitions
+ *
  * @package Email Capture & Lead Generation
  * @since 1.0.0
  */
-if( !defined( 'ECLG_VERSION' ) ) {
-	define( 'ECLG_VERSION', '1.0.0' ); // plugin version
+if ( ! defined( 'ECLG_VERSION' ) ) {
+	define( 'ECLG_VERSION', '1.0.1' ); // plugin version
 }
-if( !defined( 'ECLG_PLUGIN_DIR' ) ) {
+if ( ! defined( 'ECLG_PLUGIN_DIR' ) ) {
 	define( 'ECLG_PLUGIN_DIR', dirname( __FILE__ ) ); // plugin dir
 }
-if( !defined( 'ECLG_ADMIN_DIR' ) ) {
+if ( ! defined( 'ECLG_ADMIN_DIR' ) ) {
 	define( 'ECLG_ADMIN_DIR', ECLG_PLUGIN_DIR . '/includes/admin' ); // plugin admin dir
 }
-if( !defined( 'ECLG_PLUGIN_URL' ) ) {
+if ( ! defined( 'ECLG_PLUGIN_URL' ) ) {
 	define( 'ECLG_PLUGIN_URL', plugin_dir_url( __FILE__ ) ); // plugin url
 }
 
 /**
  * Initialize all global variables
- * 
+ *
  * @package Email Capture & Lead Generation
  * @since 1.0.0
  */
@@ -50,7 +50,7 @@ if( !defined( 'ECLG_PLUGIN_URL' ) ) {
 global $eclg_scripts,$eclg_admin,$eclg_newsletter;
 
 /**
- * 
+ *
  * @package Email Capture & Lead Generation
  * @since 1.0.0
  */
@@ -64,9 +64,9 @@ add_action( 'load_plugins', 'eclg_load_plugin_textdomain' );
 
 /**
  * Activation hook
- * 
+ *
  * Register plugin activation hook.
- * 
+ *
  * @package Email Capture & Lead Generation
  * @since 1.0.0
  */
@@ -77,7 +77,7 @@ register_activation_hook( __FILE__, 'eclg_plugin_install' );
  * Deactivation hook
  *
  * Register plugin deactivation hook.
- * 
+ *
  * @package Email Capture & Lead Generation
  * @since 1.0.0
  */
@@ -85,20 +85,20 @@ register_activation_hook( __FILE__, 'eclg_plugin_install' );
 register_deactivation_hook( __FILE__, 'eclg_plugin_uninstall' );
 
 /**
- * Plugin Setup Activation hook call back 
+ * Plugin Setup Activation hook call back
  *
- * Initial setup of the plugin setting default options 
+ * Initial setup of the plugin setting default options
  * and database tables creations.
- * 
+ *
  * @package Email Capture & Lead Generation
  * @since 1.0.0
  */
 function eclg_plugin_install() {
-	
+
 	global $wpdb;
 
 	$charset_collate = $wpdb->get_charset_collate();
-	$table_name = $wpdb->prefix . 'eclg_subscribers';
+	$table_name      = $wpdb->prefix . 'eclg_subscribers';
 
 	$sql = "CREATE TABLE $table_name (
 		id int(11) NOT NULL AUTO_INCREMENT,
@@ -111,7 +111,7 @@ function eclg_plugin_install() {
 		PRIMARY KEY (id)
 	) $charset_collate;";
 
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta( $sql );
 }
 
@@ -125,30 +125,31 @@ function eclg_plugin_install() {
  * @since 1.0.0
  */
 function eclg_plugin_uninstall() {
-	
+
 	global $wpdb;
 
-	/*$charset_collate = $wpdb->get_charset_collate();
+	/*
+	$charset_collate = $wpdb->get_charset_collate();
 	$table_name = $wpdb->prefix . 'eclg_subscribers';
-    $sql = "DROP TABLE IF EXISTS $table_name";
-    $wpdb->query($sql);
+	$sql = "DROP TABLE IF EXISTS $table_name";
+	$wpdb->query($sql);
 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sql );*/
 }
 
 
-//Includes all scripts class file
-require_once( ECLG_PLUGIN_DIR . '/includes/class-eclg-scripts.php');
+// Includes all scripts class file
+require_once ECLG_PLUGIN_DIR . '/includes/class-eclg-scripts.php';
 
-//Includes shortcode class file
-require_once ( ECLG_PLUGIN_DIR . '/includes/class-eclg-shortcodes.php');
+// Includes shortcode class file
+require_once ECLG_PLUGIN_DIR . '/includes/class-eclg-shortcodes.php';
 
-//Includes public class file
-require_once ( ECLG_PLUGIN_DIR . '/includes/class-eclg-public.php');
+// Includes public class file
+require_once ECLG_PLUGIN_DIR . '/includes/class-eclg-public.php';
 
-//Includes Admin file
-require_once ( ECLG_ADMIN_DIR . '/class-eclg-admin.php');
+// Includes Admin file
+require_once ECLG_ADMIN_DIR . '/class-eclg-admin.php';
 
 
 

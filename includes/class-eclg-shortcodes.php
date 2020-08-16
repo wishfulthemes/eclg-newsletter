@@ -1,6 +1,8 @@
 <?php
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Scripts Class
@@ -11,18 +13,18 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * @since 1.0.0
  */
 class Eclg_Shortcodes {
-	
-	public function __construct(){
-		
-		// Shortcode to print newletter form 
-		// Shortcode : [eclg_capture lastname="yes" firstname="yes" button_text="Send"]
-		add_shortcode( 'eclg_capture', array($this, 'eclg_email_form_shortcode') );
 
-		//Use shortcode in widget
-		add_filter('widget_text','do_shortcode');
+	public function __construct() {
+
+		// Shortcode to print newletter form
+		// Shortcode : [eclg_capture lastname="yes" firstname="yes" button_text="Send"]
+		add_shortcode( 'eclg_capture', array( $this, 'eclg_email_form_shortcode' ) );
+
+		// Use shortcode in widget
+		add_filter( 'widget_text', 'do_shortcode' );
 
 	}
-	
+
 	/**
 	 * Adding Html
 	 *
@@ -32,20 +34,26 @@ class Eclg_Shortcodes {
 	 * @since 1.0.0
 	 */
 	function eclg_email_form_shortcode( $atts, $content ) {
-		
+
 		// Getting attributes of shortcode
-		extract( shortcode_atts( array(
-			'button_text'	=> __( 'Submit', 'eclg-newsletter' ),
-			'firstname'	=> 'yes',
-			'lastname'	=> 'yes',
-		), $atts ) );
-		
+		extract(
+			shortcode_atts(
+				array(
+					'button_text' => __( 'Submit', 'eclg-newsletter' ),
+					'firstname'   => 'yes',
+					'lastname'    => 'yes',
+				),
+				$atts
+			)
+		);
+
 		ob_start(); ?>
 
 		<div class="eclg-email-capture">
 			<form  id="eclg-form" >
 				<?php
-				if( $firstname == 'yes' ) { ?>
+				if ( $firstname == 'yes' ) {
+					?>
 					<div class="input-field">
 						<label><?php echo __( 'First Name', 'eclg-newsletter' ); ?></label>
 						<input type="text" name="first_name" class="eclg_firstname" />
@@ -53,9 +61,10 @@ class Eclg_Shortcodes {
 				<?php } ?>
 
 				<?php
-				if( $lastname == 'yes' ) { ?>
+				if ( $lastname == 'yes' ) {
+					?>
 					<div class="input-field">
-						<label><?php echo __( 'Last Name', 'eclg-newsletter' ) ?></label>
+						<label><?php echo __( 'Last Name', 'eclg-newsletter' ); ?></label>
 						<input type="text" name="last_name" class="eclg_lastname">
 					</div>
 				<?php } ?>
