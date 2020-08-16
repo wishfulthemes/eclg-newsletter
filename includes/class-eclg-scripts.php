@@ -66,13 +66,16 @@ class Eclg_Scripts {
 	 */
 	public function eclg_admin_scripts() {
 
+		$dep_file_url = sprintf( '%s/app/build/admin.asset.php', ECLG_PLUGIN_DIR );
+
 		wp_enqueue_style( 'wp-components' );
 
-		$deps = include_once sprintf( '%s/app/build/admin.asset.php', ECLG_PLUGIN_DIR );
+		$deps = file_exists( $dep_file_url ) ? include_once sprintf( '%s/app/build/admin.asset.php', ECLG_PLUGIN_DIR ) : '';
 
-		wp_register_script( 'eclg-admin-scripts', ECLG_PLUGIN_URL . '/app/build/admin.js', $deps['dependencies'], $deps['version'], true );
-
-		wp_enqueue_script( 'eclg-admin-scripts' );
+		if ( is_array( $deps ) && ! empty( $deps ) ) {
+			wp_register_script( 'eclg-admin-scripts', ECLG_PLUGIN_URL . '/app/build/admin.js', $deps['dependencies'], $deps['version'], true );
+			wp_enqueue_script( 'eclg-admin-scripts' );
+		}
 
 	}
 
