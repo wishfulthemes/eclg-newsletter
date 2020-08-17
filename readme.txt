@@ -3,7 +3,7 @@ Contributors: wishfulthemes
 Tags: Email Capture & Lead Generation, Subscription, newsletter subscribe, newsletter signup, email subscribe, email capture, newsletter widget, email newsletter widget, newsletter plugin
 Requires at least: 4.8
 Tested up to: 5.3
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Author: WishfulThemes
 Version: 1.0.0
 License: GPLv2 or later
@@ -50,6 +50,9 @@ If you’re stuck or ever have any questions or need any help regarding the use 
 A. Contact us at: [wishfulthemes@gmail.com](mailto:wishfulthemes@gmail.com)
 
 == Changelog == 
+
+= V1.0.1 - 30 Jan, 2020 =
+- File naming and Text domain arrangement  
 
 = V1.0.0 - 19 Jan, 2020 =
 - initial release.

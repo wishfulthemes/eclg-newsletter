@@ -35,7 +35,7 @@ class Eclg_Shortcodes {
 		
 		// Getting attributes of shortcode
 		extract( shortcode_atts( array(
-			'button_text'	=> __( 'Submit', 'eclg-newsletter' ),
+			'button_text'	=> __( 'Submit', 'email-capture-lead-generation' ),
 			'firstname'	=> 'yes',
 			'lastname'	=> 'yes',
 		), $atts ) );
@@ -47,7 +47,7 @@ class Eclg_Shortcodes {
 				<?php
 				if( $firstname == 'yes' ) { ?>
 					<div class="input-field">
-						<label><?php echo __( 'First Name', 'eclg-newsletter' ); ?></label>
+						<label><?php echo __( 'First Name', 'email-capture-lead-generation' ); ?></label>
 						<input type="text" name="first_name" class="eclg_firstname" />
 					</div>
 				<?php } ?>
@@ -55,13 +55,13 @@ class Eclg_Shortcodes {
 				<?php
 				if( $lastname == 'yes' ) { ?>
 					<div class="input-field">
-						<label><?php echo __( 'Last Name', 'eclg-newsletter' ) ?></label>
+						<label><?php echo __( 'Last Name', 'email-capture-lead-generation' ) ?></label>
 						<input type="text" name="last_name" class="eclg_lastname">
 					</div>
 				<?php } ?>
 
 				<div class="input-field">
-					<label><?php echo __( 'Email', 'eclg-newsletter' ); ?></label>
+					<label><?php echo __( 'Email', 'email-capture-lead-generation' ); ?></label>
 					<input type="text" name="email" class="eclg_email">
 				</div>
 
