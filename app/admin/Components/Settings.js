@@ -1,7 +1,7 @@
 /**
  * Admin settings page component.
  *
- * @package eclg-newsletter
+ * @package email-capture-lead-generation
  * @since 1.0.2
  */
 
@@ -24,14 +24,14 @@ const Shortcode = (props) => {
                 </label>
 
 
-                <div className="eclg-newsletter-field-wrapper">
+                <div className="email-capture-lead-generation-field-wrapper">
                     <ClipboardButton
                         isSecondary
                         text={shortCodeText}
                         onCopy={() => setHasCopied(true)}
                         onFinishCopy={() => setHasCopied(false)}
                     >
-                        {hasCopied ? __('Shortcode Copied!', 'eclg-newsletter') : __('Copy Shortcode', 'eclg-newsletter')}
+                        {hasCopied ? __('Shortcode Copied!', 'email-capture-lead-generation') : __('Copy Shortcode', 'email-capture-lead-generation')}
                     </ClipboardButton>
                 </div>
 
@@ -58,7 +58,7 @@ const Settings = () => {
             {
                 displayFirstName: 'yes',
                 displayLastName: 'yes',
-                buttonLabel: __('Submit', 'eclg-newsletter'),
+                buttonLabel: __('Submit', 'email-capture-lead-generation'),
             }
         );
 
@@ -70,7 +70,7 @@ const Settings = () => {
     return (
         <>
 
-            <Panel header={__('Shortcode and Settings', 'eclg-newsletter')}>
+            <Panel header={__('Shortcode and Settings', 'email-capture-lead-generation')}>
 
                 {
                     isLoading ?
@@ -80,15 +80,15 @@ const Settings = () => {
                         :
 
                         <>
-                            <PanelBody title={__('Shortcode', 'eclg-newsletter')}>
+                            <PanelBody title={__('Shortcode', 'email-capture-lead-generation')}>
                                 <Shortcode settingsData={settingsData} />
                             </PanelBody>
 
-                            <PanelBody title={__('Settings', 'eclg-newsletter')}>
+                            <PanelBody title={__('Settings', 'email-capture-lead-generation')}>
                                 <form>
                                     <PanelRow>
-                                        <label>{__('Display first name field in subscription form?', 'eclg-newsletter')}</label>
-                                        <div className="eclg-newsletter-field-wrapper">
+                                        <label>{__('Display first name field in subscription form?', 'email-capture-lead-generation')}</label>
+                                        <div className="email-capture-lead-generation-field-wrapper">
                                             <ToggleControl
                                                 checked={displayFirstName == 'yes'}
                                                 onChange={
@@ -105,8 +105,8 @@ const Settings = () => {
                                     </PanelRow>
 
                                     <PanelRow>
-                                        <label>{__('Display last name field in subscription form?', 'eclg-newsletter')}</label>
-                                        <div className="eclg-newsletter-field-wrapper">
+                                        <label>{__('Display last name field in subscription form?', 'email-capture-lead-generation')}</label>
+                                        <div className="email-capture-lead-generation-field-wrapper">
                                             <ToggleControl
                                                 checked={displayLastName == 'yes'}
                                                 onChange={
@@ -123,8 +123,8 @@ const Settings = () => {
                                     </PanelRow>
 
                                     <PanelRow>
-                                        <label>{__('Subscription form button label', 'eclg-newsletter')}</label>
-                                        <div className="eclg-newsletter-field-wrapper">
+                                        <label>{__('Subscription form button label', 'email-capture-lead-generation')}</label>
+                                        <div className="email-capture-lead-generation-field-wrapper">
                                             <TextControl
                                                 value={buttonLabel ? buttonLabel : ''}
                                                 onChange={

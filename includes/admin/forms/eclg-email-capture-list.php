@@ -95,7 +95,7 @@ class Eclg_Subscribers_List extends WP_List_Table {
         switch( $column_name ){
             case 'first_name':
             case 'last_name':
-                return !empty( $item[$column_name] ) ? esc_html($item[$column_name]) : __( ' - ', 'eclg-newsletter' );
+                return !empty( $item[$column_name] ) ? esc_html($item[$column_name]) : __( ' - ', 'email-capture-lead-generation' );
                 break;
             case 'email':
                 return esc_html($item[$column_name]);
@@ -127,7 +127,7 @@ class Eclg_Subscribers_List extends WP_List_Table {
 
 	    //Build row actions
 		$actions = array(
-			'delete'    => sprintf('<a href="?page=%s&action=%s&eclg_ids[]=%s">'.__('Delete', 'eclg-newsletter').'</a>',esc_attr($_REQUEST['page']),'delete',esc_attr($item['id']))
+			'delete'    => sprintf('<a href="?page=%s&action=%s&eclg_ids[]=%s">'.__('Delete', 'email-capture-lead-generation').'</a>',esc_attr($_REQUEST['page']),'delete',esc_attr($item['id']))
 			);
 
 	    //Return the title contents	        
@@ -167,10 +167,10 @@ class Eclg_Subscribers_List extends WP_List_Table {
 	
 		$columns = array(
 						'cb'			=> '<input type="checkbox" />', //Render a checkbox instead of text
-						'email'			=> __( 'Email', 'eclg-newsletter' ),
-                        'first_name'    => __( 'First Name', 'eclg-newsletter' ),
-                        'last_name'     => __( 'Last Name', 'eclg-newsletter' ),
-						'date'			=> __( 'Created Date', 'eclg-newsletter' )
+						'email'			=> __( 'Email', 'email-capture-lead-generation' ),
+                        'first_name'    => __( 'First Name', 'email-capture-lead-generation' ),
+                        'last_name'     => __( 'Last Name', 'email-capture-lead-generation' ),
+						'date'			=> __( 'Created Date', 'email-capture-lead-generation' )
 					);
         return $columns;
     }
@@ -204,7 +204,7 @@ class Eclg_Subscribers_List extends WP_List_Table {
 	 * @since 1.0.0
 	 */
 	public function no_items() {
-		_e( 'No newsletter found.', 'eclg-newsletter' );
+		_e( 'No newsletter found.', 'email-capture-lead-generation' );
 	}
 	
 	/**
@@ -234,7 +234,7 @@ class Eclg_Subscribers_List extends WP_List_Table {
     
         //Detect when a bulk action is being triggered...
         if( 'delete'===$this->current_action() ) {
-        	wp_die(__( 'Subscriber deleted successfully.', 'eclg-newsletter' ));
+        	wp_die(__( 'Subscriber deleted successfully.', 'email-capture-lead-generation' ));
         } 
         
     }
@@ -348,7 +348,7 @@ $NewsletterListTable->prepare_items();
 	if( !empty($_GET['message']) ) {
 		if( $_GET['message'] == '3' ) {
 			$html .= '<div class="updated" id="message">
-			<p><strong>'.__( 'Subscribers deleted successfully.', 'eclg-newsletter' ).'</strong></p>
+			<p><strong>'.__( 'Subscribers deleted successfully.', 'email-capture-lead-generation' ).'</strong></p>
 			</div>'; 
 		}
 	}
@@ -357,12 +357,12 @@ $NewsletterListTable->prepare_items();
 	<!-- Forms are NOT created automatically, so you need to wrap the table in one to use features like bulk actions -->
 	<form id="newsletter-filter" method="get">
 		<!-- For plugins, we also need to ensure that the form posts back to our current page -->
-		<h1 class="wp-heading-inline"><?php _e( 'Signup Users', 'eclg-newsletter' ); ?></h1>
+		<h1 class="wp-heading-inline"><?php _e( 'Signup Users', 'email-capture-lead-generation' ); ?></h1>
 		<input type="submit" name="export" class="page-title-action" value="Export CSV" />
 		
 		<input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']); ?>" />
 		<!-- Search User -->
-		<?php $NewsletterListTable->search_box( __( 'Search User', 'eclg-newsletter' ), 'eclg_ltable_search' ); ?>
+		<?php $NewsletterListTable->search_box( __( 'Search User', 'email-capture-lead-generation' ), 'eclg_ltable_search' ); ?>
 		<!-- Now we can render the completed list table -->
 		<?php $NewsletterListTable->display(); ?>
 
