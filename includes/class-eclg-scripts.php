@@ -66,6 +66,10 @@ class Eclg_Scripts {
 	 */
 	public function eclg_admin_scripts() {
 
+		$localized_data = array(
+			'eclg_options' => get_option( 'eclg_options' ),
+		);
+
 		$dep_file_url = sprintf( '%s/app/build/admin.asset.php', ECLG_PLUGIN_DIR );
 
 		wp_enqueue_style( 'wp-components' );
@@ -74,6 +78,7 @@ class Eclg_Scripts {
 
 		if ( is_array( $deps ) && ! empty( $deps ) ) {
 			wp_register_script( 'eclg-admin-scripts', ECLG_PLUGIN_URL . '/app/build/admin.js', $deps['dependencies'], $deps['version'], true );
+			wp_localize_script( 'eclg-admin-scripts', 'eclg_data', $localized_data );
 			wp_enqueue_script( 'eclg-admin-scripts' );
 		}
 

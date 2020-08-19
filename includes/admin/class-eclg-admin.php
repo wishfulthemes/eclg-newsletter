@@ -21,6 +21,8 @@ class Eclg_Admin {
 		add_action( 'admin_menu', array( $this, 'eclg_ltable_add_menu_page' ) );
 
 		add_action( 'admin_init', array( $this, 'wpesn_ltable_process_bulk_action' ) );
+
+		add_action( 'wp_ajax_eclg_save_data', array( $this, 'eclg_save_data' ) );
 	}
 
 	/**
@@ -96,6 +98,30 @@ class Eclg_Admin {
 		);
 
 		// add_action( "admin_head-$eclg_setting", array() );
+	}
+
+
+	public function eclg_save_data() {
+		$submitted_data = ! empty( $_POST['eclg_doing_ajax'] ) ? $_POST : null;
+
+		if ( ! $submitted_data ) {
+			return;
+		}
+
+		/**
+		 * We don't want this key in our db.
+		 */
+		if ( isset( $submitted_data['eclg_doing_ajax'] ) ) {
+			unset( $submitted_data['eclg_doing_ajax'] );
+		}
+
+		$all_options = get_option( 'eclg_options', array() );
+
+		$all_options = array_replace_recursive( $all_options, $submitted_data );
+
+		update_option( 'eclg_options', $all_options );
+
+		wp_send_json_success( $all_options );
 	}
 
 
