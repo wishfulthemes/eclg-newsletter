@@ -22,6 +22,7 @@ class Eclg_Admin {
 
 		add_action( 'admin_init', array( $this, 'wpesn_ltable_process_bulk_action' ) );
 
+		add_action( 'wp_ajax_eclg_header_auth', array( $this, 'eclg_header_auth' ) );
 		add_action( 'wp_ajax_eclg_save_data', array( $this, 'eclg_save_data' ) );
 	}
 
@@ -101,10 +102,75 @@ class Eclg_Admin {
 	}
 
 
+	public function eclg_header_auth() {
+
+		$submitted_data = ! empty( $_POST['eclg_fetching_lists'] ) ? $_POST : null;
+
+		if ( ! $submitted_data ) {
+			wp_send_json_error();
+			exit;
+		}
+
+		$integration_data  = isset( $submitted_data['eclg_integration'] ) ? $submitted_data['eclg_integration'] : array();
+		$selected_provider = isset( $integration_data['selectedProvider'] ) ? $integration_data['selectedProvider'] : array();
+		$api_keys          = isset( $integration_data['apiKeys'] ) ? $integration_data['apiKeys'] : array();
+
+		$url = ! empty( $api_keys[ $selected_provider ]['url'] ) ? $api_keys[ $selected_provider ]['url'] : '';
+		$key = ! empty( $api_keys[ $selected_provider ]['key'] ) ? $api_keys[ $selected_provider ]['key'] : '';
+
+		$options = array();
+
+		$args     = array();
+		$endpoint = '';
+
+		if ( 'mailchimp' === $selected_provider ) {
+			$args     = array(
+				'headers' => array(
+					'Content-Type'  => 'application/json',
+					'Authorization' => 'Basic ' . base64_encode( "username:$key" ),
+				),
+			);
+			$endpoint = "{$url}/3.0/lists";
+		} else {
+			$args     = array(
+				'headers' => array(
+					'Content-Type' => 'application/json',
+					'Api-Token'    => $key,
+				),
+			);
+			$endpoint = "{$url}/api/3/lists";
+		}
+
+		$response = wp_remote_get( $endpoint, $args );
+
+		if ( is_object( $response ) && isset( $response->errors ) ) {
+			wp_send_json_error();
+			exit;
+		}
+
+		$res_body = is_array( $response ) && isset( $response['body'] ) ? json_decode( $response['body'] ) : array();
+		$lists    = is_object( $res_body ) && isset( $res_body->lists ) ? $res_body->lists : '';
+
+		if ( is_array( $lists ) && ! empty( $lists ) ) {
+			foreach ( $lists as $index => $list ) {
+				$list_id   = isset( $list->id ) && ! empty( $list->id ) ? $list->id : '';
+				$list_name = isset( $list->name ) && ! empty( $list->name ) ? $list->name : '';
+
+				$options[ $index ]['value'] = $list_id;
+				$options[ $index ]['label'] = $list_name;
+
+			}
+		}
+
+		wp_send_json_success( $options );
+	}
+
+
 	public function eclg_save_data() {
 		$submitted_data = ! empty( $_POST['eclg_doing_ajax'] ) ? $_POST : null;
 
 		if ( ! $submitted_data ) {
+			wp_send_json_error();
 			return;
 		}
 

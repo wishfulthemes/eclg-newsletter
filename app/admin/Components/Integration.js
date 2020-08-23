@@ -30,9 +30,7 @@ const providerOptions = () => {
 
 const providerLists = () => {
     return [
-        { label: __('Select List', 'email-capture-lead-generation'), value: null, disabled: true },
-        { label: 'List One', value: 'listOne' },
-        { label: 'List Two', value: 'listTwo' }
+        { label: __('Click Refresh', 'email-capture-lead-generation'), value: null, disabled: true },
     ]
 }
 
@@ -48,7 +46,11 @@ const Integration = () => {
 
     const [isLoading, setIsLoading] = useState(true);
 
+    const [getLists, setLists] = useState(lists);
+
     const [integrationData, setIntegrationData] = useState({});
+
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const [isSaving, setIsSaving] = useState(false);
 
@@ -79,12 +81,40 @@ const Integration = () => {
 
     const apiKey = 'undefined' !== typeof apiKeys && 'undefined' !== typeof apiKeys[selectedProvider] ? apiKeys[selectedProvider] : '';
 
-    let activeCampaignUrl = '';
-    let activeCampaignKey = '';
-    if ('activecampaign' == selectedProvider) {
-        activeCampaignUrl = 'undefined' !== typeof apiKey && 'undefined' !== typeof apiKey.url ? apiKey.url : '';
-        activeCampaignKey = 'undefined' !== typeof apiKey && 'undefined' !== typeof apiKey.key ? apiKey.key : '';
+    let providersUrl = '';
+    let providersKey = '';
+    providersUrl = 'undefined' !== typeof apiKey && 'undefined' !== typeof apiKey.url ? apiKey.url : '';
+    providersKey = 'undefined' !== typeof apiKey && 'undefined' !== typeof apiKey.key ? apiKey.key : '';
+
+
+    const onRefreshButtonClicked = () => {
+        setIsRefreshing(true);
+
+        let data = new FormData();
+
+        if ('yes' !== useOwnList && null !== selectedProvider) {
+            data.append('eclg_integration[selectedProvider]', selectedProvider);
+            data.append(`eclg_integration[apiKeys][${selectedProvider}][url]`, providersUrl);
+            data.append(`eclg_integration[apiKeys][${selectedProvider}][key]`, providersKey);
+        }
+        data.append('eclg_fetching_lists', 'yes');
+
+        apiFetch({
+            url: `${ajaxurl}?action=eclg_header_auth`,
+            method: 'post',
+            body: data,
+        }).then(res => {
+            if ('undefined' !== typeof res.success && true === res.success) {
+                setLists(res.data);
+            }
+            console.log(res);
+            setIsRefreshing(false);
+        });
+
+
     }
+
+
 
     const onSaveButtonClicked = () => {
 
@@ -96,12 +126,8 @@ const Integration = () => {
 
         if ('yes' !== useOwnList && null !== selectedProvider) {
             data.append('eclg_integration[selectedProvider]', selectedProvider);
-            if ( 'activecampaign' == selectedProvider ) {
-                data.append(`eclg_integration[apiKeys][${selectedProvider}][url]`, activeCampaignUrl);
-                data.append(`eclg_integration[apiKeys][${selectedProvider}][key]`, activeCampaignKey);
-            } else {
-                data.append(`eclg_integration[apiKeys][${selectedProvider}]`, apiKey);
-            }
+            data.append(`eclg_integration[apiKeys][${selectedProvider}][url]`, providersUrl);
+            data.append(`eclg_integration[apiKeys][${selectedProvider}][key]`, providersKey);
         }
         data.append('eclg_doing_ajax', 'yes');
 
@@ -187,102 +213,109 @@ const Integration = () => {
                                             <PanelBody title={panelBodyTitle}>
 
                                                 {
-                                                    'activecampaign' == selectedProvider ?
+                                                    'mailchimp' !== selectedProvider &&
 
-                                                        <>
+                                                    <PanelRow>
+                                                        <label>{__('URL', 'email-capture-lead-generation')}</label>
+                                                        <div className="email-capture-lead-generation-field-wrapper">
+                                                            <TextControl
+                                                                value={providersUrl ? providersUrl : ''}
+                                                                readOnly={'mailchimp' == selectedProvider && true}
+                                                                onChange={
+                                                                    (value) => {
+                                                                        let api = {};
+                                                                        api = integrationData.apiKeys;
 
-                                                            <PanelRow>
-                                                                <label>{__('URL', 'email-capture-lead-generation')}</label>
-                                                                <div className="email-capture-lead-generation-field-wrapper">
-                                                                    <TextControl
-                                                                        value={activeCampaignUrl ? activeCampaignUrl : ''}
-                                                                        onChange={
-                                                                            (value) => {
-                                                                                let api = {};
-                                                                                api = integrationData.apiKeys;
-
-                                                                                if ( 'undefined' == typeof api[selectedProvider] ) {
-                                                                                    api[selectedProvider] = {};
-                                                                                }
-                                                                                api[selectedProvider]['url'] = value;
-                                                                                setIntegrationData({
-                                                                                    ...integrationData,
-                                                                                    apiKeys: api
-                                                                                });
-                                                                            }
+                                                                        if ('undefined' == typeof api[selectedProvider]) {
+                                                                            api[selectedProvider] = {};
                                                                         }
-                                                                    />
-                                                                </div>
-                                                            </PanelRow>
-
-
-                                                            <PanelRow>
-                                                                <label>{__('Key', 'email-capture-lead-generation')}</label>
-                                                                <div className="email-capture-lead-generation-field-wrapper">
-                                                                    <TextControl
-                                                                        value={activeCampaignKey ? activeCampaignKey : ''}
-                                                                        onChange={
-                                                                            (value) => {
-                                                                                let api = {};
-                                                                                api = integrationData.apiKeys;
-
-                                                                                if ( 'undefined' == typeof api[selectedProvider] ) {
-                                                                                    api[selectedProvider] = {};
-                                                                                }
-                                                                                api[selectedProvider]['key'] = value;
-                                                                                setIntegrationData({
-                                                                                    ...integrationData,
-                                                                                    apiKeys: api
-                                                                                });
-                                                                            }
-                                                                        }
-                                                                    />
-                                                                </div>
-                                                            </PanelRow>
-
-
-                                                        </>
-
-                                                        :
-
-                                                        <>
-
-                                                            <PanelRow>
-                                                                <label>{__('API Key', 'email-capture-lead-generation')}</label>
-                                                                <div className="email-capture-lead-generation-field-wrapper">
-                                                                    <TextControl
-                                                                        value={apiKey ? apiKey : ''}
-                                                                        onChange={
-                                                                            (value) => {
-                                                                                let api = {};
-                                                                                api = integrationData.apiKeys;
-                                                                                api[selectedProvider] = value;
-                                                                                setIntegrationData({
-                                                                                    ...integrationData,
-                                                                                    apiKeys: api
-                                                                                });
-                                                                            }
-                                                                        }
-                                                                    />
-                                                                </div>
-                                                            </PanelRow>
-
-                                                        </>
-
+                                                                        api[selectedProvider]['url'] = value;
+                                                                        setIntegrationData({
+                                                                            ...integrationData,
+                                                                            apiKeys: api
+                                                                        });
+                                                                    }
+                                                                }
+                                                            />
+                                                        </div>
+                                                    </PanelRow>
                                                 }
 
 
                                                 <PanelRow>
-                                                    <label>{__('Lists', 'email-capture-lead-generation')}</label>
+                                                    <label>{__('Key', 'email-capture-lead-generation')}</label>
                                                     <div className="email-capture-lead-generation-field-wrapper">
-                                                        <SelectControl
-                                                            options={lists}
+                                                        <TextControl
+                                                            value={providersKey ? providersKey : ''}
                                                             onChange={
                                                                 (value) => {
-                                                                    console.log(value);
+                                                                    if ('mailchimp' == selectedProvider) {
+                                                                        let mailChimpUrl = '';
+                                                                        let serverPrefix = '';
+                                                                        if ('undefined' !== typeof value && '' !== value) {
+                                                                            serverPrefix = value.split('-')[1];
+                                                                            if (serverPrefix) {
+                                                                                mailChimpUrl = `https://${serverPrefix}.api.mailchimp.com`
+                                                                            }
+                                                                        }
+
+                                                                        if (mailChimpUrl) {
+                                                                            let api = {};
+                                                                            api = integrationData.apiKeys;
+
+                                                                            if ('undefined' == typeof api[selectedProvider]) {
+                                                                                api[selectedProvider] = {};
+                                                                            }
+                                                                            api[selectedProvider]['url'] = mailChimpUrl;
+                                                                            setIntegrationData({
+                                                                                ...integrationData,
+                                                                                apiKeys: api
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                    let api = {};
+                                                                    api = integrationData.apiKeys;
+
+                                                                    if ('undefined' == typeof api[selectedProvider]) {
+                                                                        api[selectedProvider] = {};
+                                                                    }
+                                                                    api[selectedProvider]['key'] = value;
+                                                                    setIntegrationData({
+                                                                        ...integrationData,
+                                                                        apiKeys: api
+                                                                    });
                                                                 }
                                                             }
                                                         />
+                                                    </div>
+                                                </PanelRow>
+
+
+                                                <PanelRow>
+                                                    <label>{__('Lists', 'email-capture-lead-generation')}</label>
+                                                    <div className="email-capture-lead-generation-field-wrapper lists-wrapper">
+                                                        {
+                                                            isRefreshing ?
+                                                                <Spinner />
+                                                                :
+                                                                <>
+                                                                    <SelectControl
+                                                                        options={getLists}
+                                                                        onChange={
+                                                                            (value) => {
+                                                                                console.log(value);
+                                                                            }
+                                                                        }
+                                                                    />
+
+
+                                                                    <Button
+                                                                        isSecondary
+                                                                        onClick={() => onRefreshButtonClicked()}
+                                                                    >{__('Refresh', 'email-capture-lead-generation')}
+                                                                    </Button>
+                                                                </>
+                                                        }
                                                     </div>
                                                 </PanelRow>
 
@@ -328,7 +361,7 @@ const Integration = () => {
 
             </div>
 
-        </div>
+        </div >
 
     );
 }
