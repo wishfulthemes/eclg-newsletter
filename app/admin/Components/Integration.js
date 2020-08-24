@@ -16,6 +16,7 @@ const integrationDefault = () => {
         useOwnList: 'yes',
         selectedProvider: null,
         apiKeys: {},
+        listIDs: {},
     }
 }
 
@@ -38,7 +39,7 @@ const Integration = () => {
 
     const { eclg_options } = eclg_data;
 
-    const { eclg_integration } = eclg_options;
+    const { eclg_integration, lists_options } = eclg_options;
 
     const providers = providerOptions();
 
@@ -56,16 +57,15 @@ const Integration = () => {
 
 
     useEffect(function () {
-
         let data = {};
-        data = 'undefined' !== typeof eclg_integration ? eclg_integration : integrationDefault();
-
+        data = { ...integrationDefault(), ...eclg_integration };
         setIntegrationData(data);
+        setLists(lists_options);
         setIsLoading(false);
     }, []);
 
 
-    const { useOwnList, selectedProvider, apiKeys } = integrationData;
+    const { useOwnList, selectedProvider, apiKeys, listIDs } = integrationData;
 
     let providerLabel = '';
 
@@ -87,6 +87,12 @@ const Integration = () => {
     providersKey = 'undefined' !== typeof apiKey && 'undefined' !== typeof apiKey.key ? apiKey.key : '';
 
 
+    let getList = 'undefined' !== typeof getLists && 'undefined' !== typeof getLists[selectedProvider] ? getLists[selectedProvider] : lists;
+
+
+    let listID = 'undefined' !== typeof listIDs && 'undefined' !== typeof listIDs[selectedProvider] ? listIDs[selectedProvider] : '';
+
+
     const onRefreshButtonClicked = () => {
         setIsRefreshing(true);
 
@@ -105,15 +111,14 @@ const Integration = () => {
             body: data,
         }).then(res => {
             if ('undefined' !== typeof res.success && true === res.success) {
-                setLists(res.data);
+                let listOptn = res.data;
+                setLists({ ...getLists, ...listOptn });
             }
-            console.log(res);
             setIsRefreshing(false);
         });
 
 
     }
-
 
 
     const onSaveButtonClicked = () => {
@@ -128,6 +133,7 @@ const Integration = () => {
             data.append('eclg_integration[selectedProvider]', selectedProvider);
             data.append(`eclg_integration[apiKeys][${selectedProvider}][url]`, providersUrl);
             data.append(`eclg_integration[apiKeys][${selectedProvider}][key]`, providersKey);
+            data.append(`eclg_integration[listIDs][${selectedProvider}]`, listIDs[selectedProvider]);
         }
         data.append('eclg_doing_ajax', 'yes');
 
@@ -300,14 +306,22 @@ const Integration = () => {
                                                                 :
                                                                 <>
                                                                     <SelectControl
-                                                                        options={getLists}
+                                                                        options={getList}
+                                                                        value={listID ? listID : ''}
                                                                         onChange={
                                                                             (value) => {
-                                                                                console.log(value);
+                                                                                let listID = {};
+
+                                                                                listID = integrationData.listIDs;
+
+                                                                                listID[selectedProvider] = value;
+                                                                                setIntegrationData({
+                                                                                    ...integrationData,
+                                                                                    listIDs: listID
+                                                                                });
                                                                             }
                                                                         }
                                                                     />
-
 
                                                                     <Button
                                                                         isSecondary

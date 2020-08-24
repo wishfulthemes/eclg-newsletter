@@ -152,15 +152,28 @@ class Eclg_Admin {
 		$lists    = is_object( $res_body ) && isset( $res_body->lists ) ? $res_body->lists : '';
 
 		if ( is_array( $lists ) && ! empty( $lists ) ) {
-			foreach ( $lists as $index => $list ) {
+			$index = 0;
+
+			$options[ $selected_provider ][ $index ]['value'] = null;
+			$options[ $selected_provider ][ $index ]['label'] = null;
+
+			foreach ( $lists as $list ) {
 				$list_id   = isset( $list->id ) && ! empty( $list->id ) ? $list->id : '';
 				$list_name = isset( $list->name ) && ! empty( $list->name ) ? $list->name : '';
 
-				$options[ $index ]['value'] = $list_id;
-				$options[ $index ]['label'] = $list_name;
+				$index++;
+
+				$options[ $selected_provider ][ $index ]['value'] = $list_id;
+				$options[ $selected_provider ][ $index ]['label'] = $list_name;
 
 			}
 		}
+
+		$all_options = array();
+
+		$all_options['lists_options'] = $options;
+
+		$this->eclg_update_option( $all_options );
 
 		wp_send_json_success( $options );
 	}
@@ -181,13 +194,26 @@ class Eclg_Admin {
 			unset( $submitted_data['eclg_doing_ajax'] );
 		}
 
+		$all_options = $this->eclg_update_option( $submitted_data );
+
+		wp_send_json_success( $all_options );
+	}
+
+
+	public function eclg_update_option( $submitted_data ) {
+
+		if ( ! $submitted_data ) {
+			return;
+		}
+
 		$all_options = get_option( 'eclg_options', array() );
 
 		$all_options = array_replace_recursive( $all_options, $submitted_data );
 
 		update_option( 'eclg_options', $all_options );
 
-		wp_send_json_success( $all_options );
+		return $all_options;
+
 	}
 
 
