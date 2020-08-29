@@ -32,8 +32,9 @@ class Eclg_Public {
 
 		$all_options = get_option( 'eclg_options', array() );
 
-		$integration_data = isset( $all_options['eclg_integration'] ) ? $all_options['eclg_integration'] : array();
-		$use_own_list     = isset( $integration_data['useOwnList'] ) ? $integration_data['useOwnList'] : 'yes';
+		$integration_data  = isset( $all_options['eclg_integration'] ) ? $all_options['eclg_integration'] : array();
+		$selected_provider = isset( $integration_data['selectedProvider'] ) ? $integration_data['selectedProvider'] : array();
+		$use_own_list      = isset( $integration_data['useOwnList'] ) ? $integration_data['useOwnList'] : 'yes';
 
 		global $wpdb;
 
@@ -72,8 +73,17 @@ class Eclg_Public {
 			exit;
 		}
 
+		/**
+		 * If user disables the own list then use newletter providers.
+		 */
 		if ( 'yes' !== $use_own_list ) {
-			$response = $this->activecampaign_newsletter( $integration_data, $email, $firstname, $lastname );
+
+			if ( 'activecampaign' === $selected_provider ) {
+				$response = $this->activecampaign_newsletter( $integration_data, $email, $firstname, $lastname );
+			} else {
+				$response = $this->mailchimp_newsletter( $integration_data, $email, $firstname, $lastname );
+			}
+
 			echo json_encode( $response );
 			exit;
 		}
@@ -125,7 +135,7 @@ class Eclg_Public {
 		$list_res      = '';
 
 		$response['status'] = '0';
-		$response['errmsg'] = __( 'Sorry, please try again later.', 'email-capture-lead-generation' );
+		$response['errmsg'] = __( 'Sorry, please provide a valid email address or try again later.', 'email-capture-lead-generation' );
 
 		$selected_provider = isset( $integration_data['selectedProvider'] ) ? $integration_data['selectedProvider'] : array();
 		$api_keys          = isset( $integration_data['apiKeys'] ) ? $integration_data['apiKeys'] : array();
@@ -209,6 +219,70 @@ class Eclg_Public {
 					$response['errmsg'] = __( 'You have subscribed successfully!.', 'email-capture-lead-generation' );
 				}
 			}
+		}
+
+		return $response;
+
+	}
+
+
+	/**
+	 * Handles the mailchimp newletter response.
+	 */
+	public function mailchimp_newsletter( $integration_data, $email, $firstname, $lastname ) {
+
+		$response = array();
+
+		$args     = array();
+		$endpoint = '';
+
+		$res           = '';
+		$entry_created = '';
+
+		$response['status'] = '0';
+		$response['errmsg'] = __( 'Sorry, please provide a valid email address or try again later.', 'email-capture-lead-generation' );
+
+		$selected_provider = isset( $integration_data['selectedProvider'] ) ? $integration_data['selectedProvider'] : array();
+		$api_keys          = isset( $integration_data['apiKeys'] ) ? $integration_data['apiKeys'] : array();
+		$list_ids          = isset( $integration_data['listIDs'] ) ? $integration_data['listIDs'] : array();
+		$list_id           = isset( $list_ids[ $selected_provider ] ) ? $list_ids[ $selected_provider ] : null;
+
+		$url = ! empty( $api_keys[ $selected_provider ]['url'] ) ? $api_keys[ $selected_provider ]['url'] : '';
+		$key = ! empty( $api_keys[ $selected_provider ]['key'] ) ? $api_keys[ $selected_provider ]['key'] : '';
+
+		$contact_json = array(
+			'email_address' => $email,
+			'status'        => 'subscribed',
+			'merge_fields'  => array(
+				'FNAME' => $firstname,
+				'LNAME' => $lastname,
+			),
+		);
+
+		$args     = array(
+			'headers'     => array(
+				'Content-Type'  => 'application/json',
+				'Authorization' => 'Basic ' . base64_encode( "username:$key" ),
+			),
+			'body'        => wp_json_encode( $contact_json ),
+			'method'      => 'POST',
+			'data_format' => 'body',
+		);
+		$endpoint = "{$url}/3.0/lists/{$list_id}/members";
+
+		$res = wp_remote_post( $endpoint, $args );
+
+		if ( is_array( $res ) && isset( $res['response'] ) && isset( $res['body'] ) ) {
+			$entry_created = ! empty( $res['response']['code'] ) && 200 === $res['response']['code'];
+		}
+
+		if ( $entry_created ) {
+			/**
+			 * If we are here, then it means, we have successfully created a new contact and added it to the
+			 * admin selected list.
+			 */
+			$response['status'] = '1';
+			$response['errmsg'] = __( 'You have subscribed successfully!.', 'email-capture-lead-generation' );
 		}
 
 		return $response;
