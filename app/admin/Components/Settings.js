@@ -239,7 +239,7 @@ const Template = ({ settingsData }) => {
                         'yes' == displayFirstName ?
                             <fieldset className="email-capture__ele__fieldset">
                                 <legend>First Name</legend>
-                                <input type="text" disabled />
+                                <input type="text" />
                                 <div className="error-msg">Please enter your firstname.</div>
                             </fieldset>
                             : null
@@ -249,14 +249,14 @@ const Template = ({ settingsData }) => {
                         'yes' == displayLastName ?
                             <fieldset className="email-capture__ele__fieldset">
                                 <legend>Last Name</legend>
-                                <input type="text" disabled />
+                                <input type="text" />
                                 <div className="error-msg">Please enter your lastname.</div>
                             </fieldset>
                             : null
                     }
                     <fieldset className="email-capture__ele__fieldset">
                         <legend>Email</legend>
-                        <input type="email" disabled />
+                        <input type="email" />
                         <div className="error-msg">Please enter email address.</div>
                     </fieldset>
                     <fieldset className="email-capture__ele__fieldset email-capture__ele__fieldset--btn-wrap">
@@ -280,7 +280,7 @@ const Template = ({ settingsData }) => {
                         'yes' == displayFirstName ?
                             <fieldset className="email-capture__ele__fieldset">
                                 <legend>First Name</legend>
-                                <input type="text" disabled />
+                                <input type="text" />
                                 <div className="error-msg">Please enter your firstname.</div>
                             </fieldset>
                             : null
@@ -290,14 +290,14 @@ const Template = ({ settingsData }) => {
                         'yes' == displayLastName ?
                             <fieldset className="email-capture__ele__fieldset">
                                 <legend>Last Name</legend>
-                                <input type="text" disabled />
+                                <input type="text" />
                                 <div className="error-msg">Please enter your lastname.</div>
                             </fieldset>
                             : null
                     }
                     <fieldset className="email-capture__ele__fieldset">
                         <legend>Email</legend>
-                        <input type="email" disabled />
+                        <input type="email" />
                         <div className="error-msg">Please enter email address.</div>
                     </fieldset>
                     <fieldset className="email-capture__ele__fieldset email-capture__ele__fieldset--btn-wrap">
@@ -323,7 +323,7 @@ const Template = ({ settingsData }) => {
                             'yes' == displayFirstName ?
                                 <fieldset className="email-capture__ele__fieldset">
                                     <legend>First Name</legend>
-                                    <input type="text" disabled />
+                                    <input type="text" />
                                     <div className="error-msg">Please enter your firstname.</div>
                                 </fieldset>
                                 : null
@@ -333,14 +333,14 @@ const Template = ({ settingsData }) => {
                             'yes' == displayLastName ?
                                 <fieldset className="email-capture__ele__fieldset">
                                     <legend>Last Name</legend>
-                                    <input type="text" disabled />
+                                    <input type="text" />
                                     <div className="error-msg">Please enter your lastname.</div>
                                 </fieldset>
                                 : null
                         }
                         <fieldset className="email-capture__ele__fieldset">
                             <legend>Email</legend>
-                            <input type="email" placeholder="Your email address" disabled />
+                            <input type="email" placeholder="Your email address" />
                             <div className="error-msg">Please enter email address.</div>
                         </fieldset>
                         <fieldset className="email-capture__ele__fieldset email-capture__ele__fieldset--btn-wrap">
