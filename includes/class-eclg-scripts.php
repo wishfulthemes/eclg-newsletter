@@ -35,6 +35,7 @@ class Eclg_Scripts {
 
 		// Add style css
 		wp_register_style( 'eclg-style', ECLG_PLUGIN_URL . '/css/eclg-style.css', array(), ECLG_VERSION );
+		wp_enqueue_style( 'eclg-form-style', ECLG_PLUGIN_URL . '/css/form.css', array(), ECLG_VERSION );
 
 		// Enqueue form style
 		wp_enqueue_style( 'eclg-style' );
@@ -65,6 +66,9 @@ class Eclg_Scripts {
 	 * @since 1.0.2
 	 */
 	public function eclg_admin_scripts() {
+
+		wp_enqueue_style( 'eclg-form-style', ECLG_PLUGIN_URL . '/css/form.css', array(), ECLG_VERSION );
+		wp_enqueue_style( 'eclg-admin-style', ECLG_PLUGIN_URL . '/css/admin-styles.css', array(), ECLG_VERSION );
 
 		$localized_data = array(
 			'eclg_options' => get_option( 'eclg_options' ),
