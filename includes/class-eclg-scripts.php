@@ -67,6 +67,7 @@ class Eclg_Scripts {
 	 */
 	public function eclg_admin_scripts() {
 
+		wp_enqueue_style( 'wp-components' );
 		wp_enqueue_style( 'eclg-form-style', ECLG_PLUGIN_URL . '/css/form.css', array(), ECLG_VERSION );
 		wp_enqueue_style( 'eclg-admin-style', ECLG_PLUGIN_URL . '/css/admin-styles.css', array(), ECLG_VERSION );
 
@@ -75,8 +76,6 @@ class Eclg_Scripts {
 		);
 
 		$dep_file_url = sprintf( '%s/app/build/admin.asset.php', ECLG_PLUGIN_DIR );
-
-		wp_enqueue_style( 'wp-components' );
 
 		$deps = file_exists( $dep_file_url ) ? include_once sprintf( '%s/app/build/admin.asset.php', ECLG_PLUGIN_DIR ) : '';
 

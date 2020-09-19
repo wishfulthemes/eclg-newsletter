@@ -13,6 +13,8 @@ import apiFetch from '@wordpress/api-fetch';
 
 const settingsDefault = () => {
     return {
+        formTitle: 'Subscribe Us',
+        formDescription: '',
         displayFirstName: 'yes',
         displayLastName: 'yes',
         buttonLabel: __('Submit', 'email-capture-lead-generation'),
@@ -38,6 +40,9 @@ const templateOptions = () => {
  */
 const Settings = () => {
 
+    /**
+     * eclg_data is being localized from php.
+     */
     const { eclg_options } = eclg_data;
 
     const { eclg_settings } = eclg_options;
@@ -51,14 +56,13 @@ const Settings = () => {
     useEffect(function () {
 
         let data = {};
-        data = 'undefined' !== typeof eclg_settings ? eclg_settings : settingsDefault();
-
+        data = 'undefined' !== typeof eclg_settings && Object.keys(eclg_settings).length > 0 ? eclg_settings : settingsDefault();
         setSettingsData(data);
         setIsLoading(false);
     }, []);
 
 
-    const { displayFirstName, displayLastName, buttonLabel, templateType } = settingsData;
+    const { formTitle, formDescription, displayFirstName, displayLastName, buttonLabel, templateType } = settingsData;
 
 
     const onSaveButtonClicked = () => {
@@ -67,6 +71,8 @@ const Settings = () => {
 
         let data = new FormData();
 
+        data.append('eclg_settings[formTitle]', formTitle);
+        data.append('eclg_settings[formDescription]', formDescription);
         data.append('eclg_settings[displayFirstName]', displayFirstName);
         data.append('eclg_settings[displayLastName]', displayLastName);
         data.append('eclg_settings[buttonLabel]', buttonLabel);
@@ -126,6 +132,46 @@ const Settings = () => {
                                         </div>
                                     </PanelRow>
 
+                                    {
+                                        'undefined' !== typeof templateType && 'default' !== templateType ?
+                                            <>
+                                                <PanelRow>
+                                                    <label>{__('Form title', 'email-capture-lead-generation')}</label>
+                                                    <div className="email-capture-lead-generation-field-wrapper">
+                                                        <TextControl
+                                                            value={formTitle ? formTitle : ''}
+                                                            onChange={
+                                                                (value) => {
+                                                                    setSettingsData({
+                                                                        ...settingsData,
+                                                                        formTitle: value
+                                                                    })
+                                                                }
+                                                            }
+                                                        />
+                                                    </div>
+                                                </PanelRow>
+
+
+                                                <PanelRow>
+                                                    <label>{__('Form description', 'email-capture-lead-generation')}</label>
+                                                    <div className="email-capture-lead-generation-field-wrapper">
+                                                        <TextControl
+                                                            value={formDescription ? formDescription : ''}
+                                                            onChange={
+                                                                (value) => {
+                                                                    setSettingsData({
+                                                                        ...settingsData,
+                                                                        formDescription: value
+                                                                    })
+                                                                }
+                                                            }
+                                                        />
+                                                    </div>
+                                                </PanelRow>
+                                            </>
+                                            : null
+                                    }
 
                                     <PanelRow>
                                         <label>{__('Display first name field in subscription form?', 'email-capture-lead-generation')}</label>
@@ -223,24 +269,32 @@ const Settings = () => {
 
 
 const Template = ({ settingsData }) => {
-    const { displayFirstName, displayLastName, buttonLabel, templateType } = settingsData;
+    const { formTitle, formDescription, displayFirstName, displayLastName, buttonLabel, templateType } = settingsData;
+
+    const formHeader = <>
+        {
+            formTitle || formDescription ?
+                <header className="email-capture__header">
+                    {formTitle ? <h2>{formTitle}</h2> : null}
+                    {formDescription ? <h5>{formDescription}</h5> : null}
+                </header>
+                : null
+        }
+    </>
 
     let forms = {};
     forms['classic'] = <>
         <div className="email-capture email-capture--bg-primary">
-            <header className="email-capture__header">
-                <h2>Subscribe Us</h2>
-                <h5>Get new posts directly to your inbox</h5>
-            </header>
+            {formHeader}
             <form>
                 <div className="email-capture__ele">
 
                     {
                         'yes' == displayFirstName ?
                             <fieldset className="email-capture__ele__fieldset">
-                                <legend>First Name</legend>
+                                <legend>{__('First Name', 'email-capture-lead-generation')}</legend>
                                 <input type="text" />
-                                <div className="error-msg">Please enter your firstname.</div>
+                                <div className="error-msg">{__('Please enter your firstname.', 'email-capture-lead-generation')}</div>
                             </fieldset>
                             : null
                     }
@@ -248,16 +302,16 @@ const Template = ({ settingsData }) => {
                     {
                         'yes' == displayLastName ?
                             <fieldset className="email-capture__ele__fieldset">
-                                <legend>Last Name</legend>
+                                <legend>{__('Last Name', 'email-capture-lead-generation')}</legend>
                                 <input type="text" />
-                                <div className="error-msg">Please enter your lastname.</div>
+                                <div className="error-msg">{__('Please enter your lastname.', 'email-capture-lead-generation')}</div>
                             </fieldset>
                             : null
                     }
                     <fieldset className="email-capture__ele__fieldset">
-                        <legend>Email</legend>
+                        <legend>{__('Email', 'email-capture-lead-generation')}</legend>
                         <input type="email" />
-                        <div className="error-msg">Please enter email address.</div>
+                        <div className="error-msg">{__('Please enter email address.', 'email-capture-lead-generation')}</div>
                     </fieldset>
                     <fieldset className="email-capture__ele__fieldset email-capture__ele__fieldset--btn-wrap">
                         <legend>&nbsp;</legend>
@@ -270,18 +324,16 @@ const Template = ({ settingsData }) => {
 
     forms['standard'] = <>
         <div className="email-capture email-capture--full-width email-capture--bg-secondary">
-            <header className="email-capture__header">
-                <h2>Subscribe Us</h2>
-            </header>
+            {formHeader}
             <form>
                 <div className="email-capture__ele">
 
                     {
                         'yes' == displayFirstName ?
                             <fieldset className="email-capture__ele__fieldset">
-                                <legend>First Name</legend>
+                                <legend>{__('First Name', 'email-capture-lead-generation')}</legend>
                                 <input type="text" />
-                                <div className="error-msg">Please enter your firstname.</div>
+                                <div className="error-msg">{__('Please enter your firstname.', 'email-capture-lead-generation')}</div>
                             </fieldset>
                             : null
                     }
@@ -289,16 +341,16 @@ const Template = ({ settingsData }) => {
                     {
                         'yes' == displayLastName ?
                             <fieldset className="email-capture__ele__fieldset">
-                                <legend>Last Name</legend>
+                                <legend>{__('Last Name', 'email-capture-lead-generation')}</legend>
                                 <input type="text" />
-                                <div className="error-msg">Please enter your lastname.</div>
+                                <div className="error-msg">{__('Please enter your lastname.', 'email-capture-lead-generation')}</div>
                             </fieldset>
                             : null
                     }
                     <fieldset className="email-capture__ele__fieldset">
-                        <legend>Email</legend>
+                        <legend>{__('Email', 'email-capture-lead-generation')}</legend>
                         <input type="email" />
-                        <div className="error-msg">Please enter email address.</div>
+                        <div className="error-msg">{__('Please enter email address.', 'email-capture-lead-generation')}</div>
                     </fieldset>
                     <fieldset className="email-capture__ele__fieldset email-capture__ele__fieldset--btn-wrap">
                         <legend>&nbsp;</legend>
@@ -312,19 +364,16 @@ const Template = ({ settingsData }) => {
     forms['aurora'] = <>
         <div className="email-capture email-capture--center email-capture--bg-secondary">
             <div className="box-border">
-                <header className="email-capture__header">
-                    <h2>Subscribe Us</h2>
-                    <h5>Stay in touch to get our recent news</h5>
-                </header>
+                {formHeader}
                 <form>
                     <div className="email-capture__ele email-capture__ele--no-space">
 
                         {
                             'yes' == displayFirstName ?
                                 <fieldset className="email-capture__ele__fieldset">
-                                    <legend>First Name</legend>
+                                    <legend>{__('First Name', 'email-capture-lead-generation')}</legend>
                                     <input type="text" />
-                                    <div className="error-msg">Please enter your firstname.</div>
+                                    <div className="error-msg">{__('Please enter your firstname.', 'email-capture-lead-generation')}</div>
                                 </fieldset>
                                 : null
                         }
@@ -332,16 +381,16 @@ const Template = ({ settingsData }) => {
                         {
                             'yes' == displayLastName ?
                                 <fieldset className="email-capture__ele__fieldset">
-                                    <legend>Last Name</legend>
+                                    <legend>{__('Last Name', 'email-capture-lead-generation')}</legend>
                                     <input type="text" />
-                                    <div className="error-msg">Please enter your lastname.</div>
+                                    <div className="error-msg">{__('Please enter your lastname.', 'email-capture-lead-generation')}</div>
                                 </fieldset>
                                 : null
                         }
                         <fieldset className="email-capture__ele__fieldset">
-                            <legend>Email</legend>
+                            <legend>{__('Email', 'email-capture-lead-generation')}</legend>
                             <input type="email" placeholder="Your email address" />
-                            <div className="error-msg">Please enter email address.</div>
+                            <div className="error-msg">{__('Please enter email address.', 'email-capture-lead-generation')}</div>
                         </fieldset>
                         <fieldset className="email-capture__ele__fieldset email-capture__ele__fieldset--btn-wrap">
                             <legend>&nbsp;</legend>
