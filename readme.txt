@@ -2,8 +2,8 @@
 Contributors: wishfulthemes
 Tags: Email Capture & Lead Generation, Subscription, newsletter subscribe, newsletter signup, email subscribe, email capture, newsletter widget, email newsletter widget, newsletter plugin
 Requires at least: 4.8
-Tested up to: 5.3
-Stable tag: 1.0.0
+Tested up to: 5.9
+Stable tag: 1.0.2
 Author: WishfulThemes
 Version: 1.0.0
 License: GPLv2 or later
@@ -51,5 +51,11 @@ A. Contact us at: [wishfulthemes@gmail.com](mailto:wishfulthemes@gmail.com)
 
 == Changelog == 
 
-= V1.0.0 - 19 Jan, 2020 =
+= V1.0.2 =
+- Add MailChimp and ActiveCampaign support.
+
+= V1.0.1 =
+- Minor fixes.
+
+= V1.0.0 =
 - initial release.

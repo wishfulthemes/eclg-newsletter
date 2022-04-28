@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Email Capture & Lead Generation
  * Description: Email Capture & Lead Generation plugin helps to collect emails with first name and last name and get list of subscriber in your WordPress dashboard and download list in CSV formate.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: wishfulthemes
  * Author URI: https://www.wishfulthemes.com
  * Text Domain: email-capture-lead-generation
